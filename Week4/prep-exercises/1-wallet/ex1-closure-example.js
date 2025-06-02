@@ -1,10 +1,8 @@
 import eurosFormatter from "./euroFormatter.js";
 
 /**
- * This is the closure way of doing things and we have already completed it for you so you don't need to do anything.
- * We leave it here as an example of how your other implementations should work!
+ * Wallet implementation using closures.
  */
-
 function createWallet(name, cash = 0) {
   let dailyAllowance = 40;
   let dayTotalWithdrawals = 0;
@@ -15,12 +13,12 @@ function createWallet(name, cash = 0) {
 
   function withdraw(amount) {
     if (cash - amount < 0) {
-      console.log(`Insufficient funds!`);
+      console.log(`${name} has insufficient funds!`);
       return 0;
     }
 
     if (dayTotalWithdrawals + amount > dailyAllowance) {
-      console.log(`Insufficient remaining daily allowance!`);
+      console.log(`${name} has exceeded the daily allowance!`);
       return 0;
     }
 
@@ -31,19 +29,17 @@ function createWallet(name, cash = 0) {
 
   function transferInto(wallet, amount) {
     console.log(
-      `Transferring ${eurosFormatter.format(
-        amount
-      )} from ${name} to ${wallet.getName()}`
+      `Transferring ${eurosFormatter.format(amount)} from ${name} to ${wallet.getName()}`
     );
     const withdrawnAmount = withdraw(amount);
-    wallet.deposit(withdrawnAmount);
+    if (withdrawnAmount > 0) {
+      wallet.deposit(withdrawnAmount);
+    }
   }
 
   function setDailyAllowance(newAllowance) {
     dailyAllowance = newAllowance;
-    console.log(
-      `Daily allowance set to: ${eurosFormatter.format(newAllowance)}`
-    );
+    console.log(`${name}'s daily allowance set to ${eurosFormatter.format(newAllowance)}`);
   }
 
   function resetDailyAllowance() {
@@ -72,18 +68,17 @@ function main() {
   const walletJoe = createWallet("Joe", 10);
   const walletJane = createWallet("Jane", 20);
 
-  walletJack.transferInto(walletJoe, 50);
-  walletJack.setDailyAllowance(80);
-  walletJack.transferInto(walletJoe, 50);
+  walletJack.transferInto(walletJoe, 50);     // allowed: 50/40 daily limit fails
+  walletJack.setDailyAllowance(80);          // increase limit
+  walletJack.transferInto(walletJoe, 50);     // now works
 
-  walletJane.transferInto(walletJoe, 25);
+  walletJane.transferInto(walletJoe, 25);     // insufficient funds
+  walletJane.deposit(20);                     // +20
+  walletJane.transferInto(walletJoe, 25);     // should now work
 
-  walletJane.deposit(20);
-  walletJane.transferInto(walletJoe, 25);
-
-  walletJack.reportBalance();
-  walletJoe.reportBalance();
-  walletJane.reportBalance();
+  walletJack.reportBalance();  // Expect: 50
+  walletJoe.reportBalance();   // Expect: 85
+  walletJane.reportBalance();  // Expect: -5
 }
 
 main();

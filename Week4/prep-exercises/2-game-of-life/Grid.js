@@ -4,24 +4,28 @@ export default class Grid {
   rows = [];
 
   constructor(numRows, numColumns, cellSize) {
+    if (!cellSize || typeof cellSize !== 'number' || cellSize <= 0) {
+      throw new Error('Invalid cell size provided to Grid.');
+    }
+
     this.numRows = numRows;
     this.numColumns = numColumns;
 
+    // Set static size for Cell class
     Cell.size = cellSize;
 
-    // Create the grid as a two-dimensional array (i.e. an array of arrays)
+    // Create the grid as a two-dimensional array (array of arrays)
     for (let y = 0; y < numRows; y++) {
       const row = [];
       for (let x = 0; x < numColumns; x++) {
-        const cell = new Cell(x, y);
-        row.push(cell);
+        row.push(new Cell(x, y));
       }
       this.rows.push(row);
     }
   }
 
   isAlive(x, y) {
-    // Out-of-border cells are presumed dead
+    // Out-of-bounds cells are considered dead
     if (x < 0 || x >= this.numColumns || y < 0 || y >= this.numRows) {
       return 0;
     }

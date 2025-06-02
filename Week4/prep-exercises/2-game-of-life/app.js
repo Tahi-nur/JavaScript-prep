@@ -2,8 +2,10 @@ import Game from './Game.js';
 
 function main() {
   const canvas = document.getElementById('canvas');
-  if (!(canvas instanceof HTMLCanvasElement)) {
-    throw new Error('Canvas element not found');
+
+  // Check if the canvas element exists and is actually a <canvas>
+  if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
+    throw new Error('Canvas element not found or is not a valid <canvas>');
   }
 
   // Create the game "engine"
@@ -13,4 +15,5 @@ function main() {
   game.start();
 }
 
+// Start the game when the window is fully loaded
 window.addEventListener('load', main);

@@ -7,7 +7,11 @@
 
 let myString = 'hello,this,is,a,difficult,to,read,sentence';
 
+// ✅ Replace commas with spaces
+myString = myString.replace(/,/g, ' ');
 
+// Optional: log it
+console.log(myString);
 
 /* --- Code that will test your solution, do NOT change. Write above this line --- */
 

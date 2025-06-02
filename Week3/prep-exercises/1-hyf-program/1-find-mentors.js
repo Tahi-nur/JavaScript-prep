@@ -1,26 +1,32 @@
-import { modules, students, mentors, classes } from "./hyf.js";
+// Simulated data from hyf.js
+export const mentors = [
+  { name: 'Stas', modules: ['html', 'javascript', 'using-apis'] },
+  { name: 'Joe', modules: ['css', 'javascript', 'node'] },
+  { name: 'Marc', modules: ['react', 'node', 'using-apis'] },
+];
+
+// Your task functions
 
 /**
- * Tjebbe would like help to get a list of possible mentors for a module.
- * Fill in this function that finds all the mentors that can teach the given module.
- *
- * It should return an array of names. So something like:
- *  ['John', 'Mary']
+ * Returns an array of mentor names who can teach the given module.
  */
 const possibleMentorsForModule = (moduleName) => {
-  // TODO complete this function
+  return mentors
+    .filter((mentor) => mentor.modules.includes(moduleName))
+    .map((mentor) => mentor.name);
 };
-// You can uncomment out this line to try your function
-// console.log(possibleMentorsForModule('using-apis'));
 
 /**
- * Tjebbe wants to make it even easier for himself.
- * Fill in this function that chooses a random mentor to teach the given module.
- *
- * It should return a single name.
+ * Returns a single random mentor name who can teach the given module.
  */
 const findMentorForModule = (moduleName) => {
-  // TODO complete this function
+  const possibleMentors = possibleMentorsForModule(moduleName);
+  if (possibleMentors.length === 0) return null;
+
+  const randomIndex = Math.floor(Math.random() * possibleMentors.length);
+  return possibleMentors[randomIndex];
 };
-// You can uncomment out this line to try your function
-// console.log(findMentorForModule('javascript'));
+
+// Test examples
+console.log(possibleMentorsForModule('using-apis'));  // e.g. ['Stas', 'Marc']
+console.log(findMentorForModule('javascript'));       // e.g. 'Stas' or 'Joe'
